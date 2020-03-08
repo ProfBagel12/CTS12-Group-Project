@@ -1,48 +1,26 @@
-// Game Control Plus Library Declarations
-import org.gamecontrolplus.gui.*;
-import org.gamecontrolplus.*;
-import net.java.games.input.*;
-
-ControlIO control;
-ControlDevice stick;
-
 // Global Variable Declarations
 
 // UI Related Global Variables
-float UIBarThickness = 1.0/10;
+float UIBarThickness = 1.0/10; // UI Bar Thickness
 
 // Ship, Wall, and Bullet Related Global Variables
-<<<<<<< HEAD
-int enemyRows = 4;
-=======
-int enemyRows = 4; 
->>>>>>> parent of fd6eddc... Add files via upload
-int enemyCols = 9;
+int enemyRows = 4; // Number of Enemy Rows
+int enemyCols = 9; // Number of Enemy Columns
 
-PImage enemySprite;
+PImage enemySprite; // Initialize Sprites
 PImage userSprite;
 PImage wallSprite;
 
-<<<<<<< HEAD
-Ship[] userShip = new Ship[1];
-Bullet[] userBullets = new Bullet[1];
- 
-=======
 Ship[] userShip = new Ship[1]; // Create User Ship Array
-Bullet[] userBullets = new Bullet[1]; // Create User Buller Array
+Bullet[] userBullets = new Bullet[1]; // Create User Bullets Array
 
-Ship[] walls = new Ship[4];
+Ship[] walls = new Ship[4]; // Create Walls Array
 
->>>>>>> parent of fd6eddc... Add files via upload
-Ship[] enemyShips = new Ship[enemyRows*enemyCols];
-Bullet[] enemyBullets = new Bullet[5];
+Ship[] enemyShips = new Ship[enemyRows*enemyCols]; // Create Enemy Ships Array
+Bullet[] enemyBullets = new Bullet[5]; // Create Enemy Bullets Array
 
 int fireRate = 2;
 IntList enemyShooting = new IntList(enemyShips.length);
-
-boolean KeyboardMode = false;
-float userSpeed = 0;
-
 
 // Core Function Definitions
 void setup() {
@@ -51,20 +29,13 @@ void setup() {
   size(1000, 750);
   frameRate(30);
   
-  control = ControlIO.getInstance(this);
-  
-   stick = control.filter(GCP.STICK).getMatchedDevice("UserShipInput");
-  if (stick == null) {
-    KeyboardMode = true;
-  }
-  println(stick);
   // Creating Background
   background(0);
   
   // Create Ship Sprites  
-  enemySprite = createImage(width/(enemyCols+5), int(height*(1.0/3*(1-UIBarThickness)/(enemyRows+1))), RGB);
-  userSprite = createImage(width/(enemyCols+5), int(height*(1.0/3*(1-UIBarThickness)/(enemyRows+1))), RGB);
-  wallSprite = createImage(width/5, int(height/6), RGB);
+  enemySprite = createImage(width/(enemyCols+10), int(height*(1.0/3*(1-UIBarThickness)/(enemyRows+1))), RGB);
+  userSprite = createImage(width/(enemyCols+10), int(height*(1.0/3*(1-UIBarThickness)/(enemyRows+1))), RGB);
+  wallSprite = createImage(width/10, int(height/10), RGB);
   
   enemySprite.loadPixels();
   userSprite.loadPixels();
@@ -83,15 +54,15 @@ void setup() {
   userSprite.updatePixels();
   wallSprite.updatePixels();
   
-  // Initializing Enemy Ships & Properties
+  // Initializing Enemy Ships & Bullet Properties
   for(int i=0; i<enemyCols; i++) {
     for(int j=0; j<enemyRows; j++) {
       int idx = i + j*enemyCols;
       
-      float xPos = width*(i+1)/(enemyCols+1);
+      float xPos = width*(i+1)/(enemyCols+5);
       float yPos = height*(1.0/2*(1-UIBarThickness)*(j+1)/(enemyRows+1) + UIBarThickness);
       
-      enemyShips[idx] = new Ship( 0, xPos, yPos ); //<>//
+      enemyShips[idx] = new Ship(0, xPos, yPos); //<>//
     }
   }
   
@@ -99,21 +70,20 @@ void setup() {
     enemyShooting.append(i);
   }
   
-  // Initializing User Ship
-  userShip[0] = new Ship( 1, width/2, height*(9.0/10) );
+  // Initializing User Ship, Bullets, & Walls Properties
+  userShip[0] = new Ship(1, width/2, height*(9.0/10));
+  
+  for(int i=0; i<walls.length; i++) {
+    walls[i] = new Ship(2, width*(i+1)/(walls.length+1), height*(7.0/10));
+  }
 }
 
 void draw() {
-  
   // Drawing Modes
   imageMode(CENTER);
   
   // Enemy Ship Firing
-<<<<<<< HEAD
-  if(0 == frameCount % fireRate) {
-=======
-  if( (0 == frameCount%fireRate) && ( {
->>>>>>> parent of fd6eddc... Add files via upload
+  if( (0 == frameCount%fireRate)) {
      enemyShooting.shuffle(); 
      
      for(int i=1; i<=enemyBullets.length; i++) {
@@ -121,46 +91,27 @@ void draw() {
      }
   }
   
-  // Drawing Enemy Ships
+  // Draw Enemy Ships
   for(int i=0; i<enemyShips.length; i++) {
     if(enemyShips[i].display == true) {
+      enemyShips[i].movement();
+      
       image(enemyShips[i].sprite, enemyShips[i].xPos, enemyShips[i].yPos);
     }
   }
-  userShip[0].movement();
+  
+  // Draw User Ship & Walls
   image(userShip[0].sprite, userShip[0].xPos, userShip[0].yPos);
   
-<<<<<<< HEAD
- //<>//
-=======
   for(int i=0; i<walls.length; i++) {
     image(walls[i].sprite, walls[i].xPos, walls[i].yPos);
-  } //<>//
->>>>>>> parent of fd6eddc... Add files via upload
+  }
+  
+   //<>//
 }
 
 // Other Function Definitions
-void keyPressed(){
-  if (keyCode == (LEFT)){
-     userSpeed = -1.0;
-  }
-  if (keyCode == (RIGHT)){
-    userSpeed = 1.0;
-  }
-}
 
-void keyReleased(){
-  if (keyCode == (LEFT)) {
-    userSpeed = 0;
-  }
-  if (keyCode == (RIGHT)){
-    userSpeed = 0;
-  }
-}
-
-void processUserGameInput(){
-  
-}
 
 // Class Definitions
 class Ship {
@@ -231,11 +182,14 @@ class Ship {
     void movement() {
       switch(type) {
         case 0:
-        
+          
+          if( enemyShips[enemyShips.length-1].xPos > width*(1-1/(enemyCols+5)) ) {
+          
+          
+          xPos = xPos + xVel;
         break;
         case 1:
-        userSpeed = stick.getSlider("SHIP X").getValue();
-        xPos = xPos+userSpeed*6;
+        
         break;
         case 2:
         
