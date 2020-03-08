@@ -12,16 +12,28 @@ ControlDevice stick;
 float UIBarThickness = 1.0/10;
 
 // Ship, Wall, and Bullet Related Global Variables
+<<<<<<< HEAD
 int enemyRows = 4;
+=======
+int enemyRows = 4; 
+>>>>>>> parent of fd6eddc... Add files via upload
 int enemyCols = 9;
 
 PImage enemySprite;
 PImage userSprite;
 PImage wallSprite;
 
+<<<<<<< HEAD
 Ship[] userShip = new Ship[1];
 Bullet[] userBullets = new Bullet[1];
  
+=======
+Ship[] userShip = new Ship[1]; // Create User Ship Array
+Bullet[] userBullets = new Bullet[1]; // Create User Buller Array
+
+Ship[] walls = new Ship[4];
+
+>>>>>>> parent of fd6eddc... Add files via upload
 Ship[] enemyShips = new Ship[enemyRows*enemyCols];
 Bullet[] enemyBullets = new Bullet[5];
 
@@ -97,7 +109,11 @@ void draw() {
   imageMode(CENTER);
   
   // Enemy Ship Firing
+<<<<<<< HEAD
   if(0 == frameCount % fireRate) {
+=======
+  if( (0 == frameCount%fireRate) && ( {
+>>>>>>> parent of fd6eddc... Add files via upload
      enemyShooting.shuffle(); 
      
      for(int i=1; i<=enemyBullets.length; i++) {
@@ -114,7 +130,13 @@ void draw() {
   userShip[0].movement();
   image(userShip[0].sprite, userShip[0].xPos, userShip[0].yPos);
   
+<<<<<<< HEAD
  //<>//
+=======
+  for(int i=0; i<walls.length; i++) {
+    image(walls[i].sprite, walls[i].xPos, walls[i].yPos);
+  } //<>//
+>>>>>>> parent of fd6eddc... Add files via upload
 }
 
 // Other Function Definitions
