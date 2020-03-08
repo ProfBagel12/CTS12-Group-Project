@@ -4,20 +4,20 @@
 float UIBarThickness = 1.0/10; // UI Bar Thickness
 
 // Ship, Wall, and Bullet Related Global Variables
-int enemyRows = 4; 
-int enemyCols = 9;
+int enemyRows = 4; // Number of Enemy Rows
+int enemyCols = 9; // Number of Enemy Columns
 
-PImage enemySprite;
+PImage enemySprite; // Initialize Sprites
 PImage userSprite;
 PImage wallSprite;
 
 Ship[] userShip = new Ship[1]; // Create User Ship Array
-Bullet[] userBullets = new Bullet[1]; // Create User Buller Array
+Bullet[] userBullets = new Bullet[1]; // Create User Bullets Array
 
-Ship[] walls = new Ship[4];
+Ship[] walls = new Ship[4]; // Create Walls Array
 
-Ship[] enemyShips = new Ship[enemyRows*enemyCols];
-Bullet[] enemyBullets = new Bullet[5];
+Ship[] enemyShips = new Ship[enemyRows*enemyCols]; // Create Enemy Ships Array
+Bullet[] enemyBullets = new Bullet[5]; // Create Enemy Bullets Array
 
 int fireRate = 2;
 IntList enemyShooting = new IntList(enemyShips.length);
@@ -79,12 +79,11 @@ void setup() {
 }
 
 void draw() {
-  
   // Drawing Modes
   imageMode(CENTER);
   
   // Enemy Ship Firing
-  if( (0 == frameCount%fireRate) && ( {
+  if( (0 == frameCount%fireRate)) {
      enemyShooting.shuffle(); 
      
      for(int i=1; i<=enemyBullets.length; i++) {
@@ -106,7 +105,9 @@ void draw() {
   
   for(int i=0; i<walls.length; i++) {
     image(walls[i].sprite, walls[i].xPos, walls[i].yPos);
-  } //<>//
+  }
+  
+   //<>//
 }
 
 // Other Function Definitions
@@ -181,7 +182,11 @@ class Ship {
     void movement() {
       switch(type) {
         case 0:
-        
+          
+          if( enemyShips[enemyShips.length-1].xPos > width*(1-1/(enemyCols+5)) ) {
+          
+          
+          xPos = xPos + xVel;
         break;
         case 1:
         
