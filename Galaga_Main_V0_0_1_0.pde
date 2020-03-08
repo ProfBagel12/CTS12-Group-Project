@@ -19,18 +19,15 @@ Ship[] walls = new Ship[4]; // Create Walls Array
 Ship[] enemyShips = new Ship[enemyRows*enemyCols]; // Create Enemy Ships Array
 Bullet[] enemyBullets = new Bullet[5]; // Create Enemy Bullets Array
 
-int fireRate = 2;
-IntList enemyShooting = new IntList(enemyShips.length);
+int fireRate = 2; // Enemy Bullet Fire Rate
+IntList enemyShooting = new IntList(enemyShips.length); // Integer List Used for Randomly Selecting Firing Ship
 
 // Core Function Definitions
 void setup() {
   //Window Setup
   //fullScreen(); // To be used with final product
-  size(1000, 750);
+  size(1000, 750); // For use in testing
   frameRate(30);
-  
-  // Creating Background
-  background(0);
   
   // Create Ship Sprites  
   enemySprite = createImage(width/(enemyCols+10), int(height*(1.0/3*(1-UIBarThickness)/(enemyRows+1))), RGB);
@@ -41,7 +38,7 @@ void setup() {
   userSprite.loadPixels();
   wallSprite.loadPixels();
   
-  for(int i=0; i<enemySprite.pixels.length; i++) {
+  for(int i=0; i<enemySprite.pixels.length; i++) { // Generate User & Enemy Sprites
     enemySprite.pixels[i] = color(255, 0, 0);
     userSprite.pixels[i] = color(0, 0, 255);
   }
@@ -59,10 +56,10 @@ void setup() {
     for(int j=0; j<enemyRows; j++) {
       int idx = i + j*enemyCols;
       
-      float xPos = width*(i+1)/(enemyCols+5);
+      float xPos = width*(i+1)/(enemyCols+5) + width/6;
       float yPos = height*(1.0/2*(1-UIBarThickness)*(j+1)/(enemyRows+1) + UIBarThickness);
       
-      enemyShips[idx] = new Ship(0, xPos, yPos); //<>//
+      enemyShips[idx] = new Ship(0, xPos, yPos);
     }
   }
   
@@ -82,6 +79,9 @@ void draw() {
   // Drawing Modes
   imageMode(CENTER);
   
+  // Creating Background
+  background(0);
+  
   // Enemy Ship Firing
   if( (0 == frameCount%fireRate)) {
      enemyShooting.shuffle(); 
@@ -92,11 +92,22 @@ void draw() {
   }
   
   // Draw Enemy Ships
-  for(int i=0; i<enemyShips.length; i++) {
-    if(enemyShips[i].display == true) {
-      enemyShips[i].movement();
+  if(enemyShips[0].xVel > 0) { 
+    for(int i=0; i<enemyShips.length; i++) {
+      if(enemyShips[i].display == true) {
+        enemyShips[i].movement();
       
-      image(enemyShips[i].sprite, enemyShips[i].xPos, enemyShips[i].yPos);
+        image(enemyShips[i].sprite, enemyShips[i].xPos, enemyShips[i].yPos);
+      }
+    }
+  }
+  else {
+    for(int i=enemyShips.length-1; i>=0; i--) {
+      if(enemyShips[i].display == true) {
+        enemyShips[i].movement();
+      
+        image(enemyShips[i].sprite, enemyShips[i].xPos, enemyShips[i].yPos);
+      }
     }
   }
   
@@ -107,7 +118,7 @@ void draw() {
     image(walls[i].sprite, walls[i].xPos, walls[i].yPos);
   }
   
-   //<>//
+  
 }
 
 // Other Function Definitions
@@ -119,6 +130,7 @@ class Ship {
   PImage sprite;
   
   float xPos, yPos;
+  float xVel;
   
   int health;
   boolean display;
@@ -132,9 +144,10 @@ class Ship {
     display = true;
     
     switch(type) {
-      case 0:
+      case 0: // Enemy Case
         health = 1;
-      
+        xVel = 2;
+        
         sprite = createImage(enemySprite.width, enemySprite.height, RGB);
         sprite.loadPixels();
       
@@ -142,7 +155,7 @@ class Ship {
           sprite.pixels[i] = enemySprite.pixels[i];
         }
       break;
-      case 1:
+      case 1: // User Case
         health = 3;
       
         sprite = createImage(userSprite.width, userSprite.height, RGB);
@@ -152,7 +165,7 @@ class Ship {
           sprite.pixels[i] = userSprite.pixels[i];
         }
       break;
-      case 2:
+      case 2: // Wall Case
         health = 10;
         
         sprite = createImage(wallSprite.width, wallSprite.height, RGB);
@@ -181,17 +194,20 @@ class Ship {
     
     void movement() {
       switch(type) {
-        case 0:
-          
-          if( enemyShips[enemyShips.length-1].xPos > width*(1-1/(enemyCols+5)) ) {
-          
+        case 0: // Enemy Case
+          if(enemyShips[enemyShips.length-1].xPos >= width-enemySprite.width) {
+            xVel = -xVel; 
+          }
+          else if(enemyShips[0].xPos <= enemySprite.width) {
+            xVel = -xVel; //<>//
+          }
           
           xPos = xPos + xVel;
         break;
-        case 1:
+        case 1: // User Case
         
         break;
-        case 2:
+        case 2: // Wall Case
         
         break;
       } 
@@ -199,13 +215,13 @@ class Ship {
 
      void shoot() {
        switch(type) {
-         case 0:
+         case 0: // Enemy Case
         
          break;
-         case 1:
+         case 1: // User Case
         
          break;
-         case 2:
+         case 2: // Wall Case
         
          break;
        }
