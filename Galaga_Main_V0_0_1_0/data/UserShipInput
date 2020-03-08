@@ -1,4 +1,0 @@
-User ship input
-SHIP X	Ship position along X axis	3	SLIDER	X Axis	0	1.0	0.05
-FIRE	Shoots porjectile	1	BUTTON	Button 0	0	0.0	0.0
-PAUSE	Pauses game	1	BUTTON	Button 7	0	0.0	0.0
