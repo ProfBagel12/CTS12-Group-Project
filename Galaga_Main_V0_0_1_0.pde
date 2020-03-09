@@ -18,6 +18,7 @@ int enemyCols = 9; // Number of Enemy Columns
 PImage enemySprite; // Initialize Sprites
 PImage userSprite;
 PImage wallSprite;
+PImage backgroundSprite;
 
 Ship[] userShip = new Ship[1]; // Create User Ship Array
 Bullet[] userBullets = new Bullet[1]; // Create User Bullets Array
@@ -36,8 +37,8 @@ float userSpeed = 0;
 // Core Function Definitions
 void setup() {
   //Window Setup
-  //fullScreen(); // To be used with final product
-  size(1000, 750); // For use in testing
+  fullScreen(); // To be used with final product
+  //size(1000, 750); // For use in testing
   frameRate(30);
 
   //Controller Setup
@@ -48,27 +49,32 @@ void setup() {
   }
   println(stick);
 
+  enemySprite = loadImage("Antag.png");
+  userSprite = loadImage("Protag.png");
+  wallSprite = loadImage("Wall.png");
+  backgroundSprite = loadImage("Background.png");
+
   // Create Ship Sprites  
-  enemySprite = createImage(width/(enemyCols+10), int(height*(1.0/3*(1-UIBarThickness)/(enemyRows+1))), RGB);
-  userSprite = createImage(width/(enemyCols+10), int(height*(1.0/3*(1-UIBarThickness)/(enemyRows+1))), RGB);
-  wallSprite = createImage(width/10, int(height/10), RGB);
+  enemySprite.resize(width/(enemyCols+10), int(height*(1.0/3*(1-UIBarThickness)/(enemyRows+1))));
+  userSprite.resize(width/(enemyCols+10), int(height*(1.0/3*(1-UIBarThickness)/(enemyRows+1))));
+  wallSprite.resize(width/8, int(height/8));
+  backgroundSprite.resize(width,height);
 
-  enemySprite.loadPixels();
-  userSprite.loadPixels();
-  wallSprite.loadPixels();
+  //enemySprite.loadPixels();
+  //userSprite.loadPixels();
+  //wallSprite.loadPixels();
 
-  for (int i=0; i<enemySprite.pixels.length; i++) { // Generate User & Enemy Sprites
-    enemySprite.pixels[i] = color(255, 0, 0);
-    userSprite.pixels[i] = color(0, 0, 255);
-  }
+  //for (int i=0; i<enemySprite.pixels.length; i++) { // Generate User & Enemy Sprites
+  //enemySprite.pixels[i] = color(255, 0, 0);
+  //userSprite.pixels[i] = color(0, 0, 255);
+  //}
+  //for (int i=0; i<wallSprite.pixels.length; i++) {
+  //wallSprite.pixels[i] = color(0, 255, 0);
+  //}
 
-  for (int i=0; i<wallSprite.pixels.length; i++) {
-    wallSprite.pixels[i] = color(0, 255, 0);
-  }
-
-  enemySprite.updatePixels();
-  userSprite.updatePixels();
-  wallSprite.updatePixels();
+  //enemySprite.updatePixels();
+  //userSprite.updatePixels();
+  //wallSprite.updatePixels();
 
   // Initializing Enemy Ships & Bullet Properties
   for (int i=0; i<enemyCols; i++) {
@@ -239,11 +245,11 @@ class Ship {
       if (controllerMode) {
         userSpeed = stick.getSlider("SHIP X").getValue();
       }
-      if (xPos > width - userSprite.width){
+      if (xPos > width - userSprite.width) {
         userSpeed = 0;
         xPos = xPos - 1;
       }
-      if (xPos < userSprite.width){
+      if (xPos < userSprite.width) {
         userSpeed = 0;
         xPos = xPos +1;
       }
