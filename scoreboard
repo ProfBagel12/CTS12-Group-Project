@@ -1,0 +1,19 @@
+//declared variables
+int time = 120;
+int score = 0;
+
+
+
+//time and score tracker 
+   time= 120 - int(frameCount/frameRate);
+   fill(255, 218, 185);
+   textAlign(CENTER, CENTER);
+   text("Time: "+str(time), (width/2), int(UIBarThickness*height/2));
+   textAlign(LEFT, CENTER);
+   text("SCORE: "+str(score), (width/20), int(UIBarThickness*height/2));
+   textAlign(RIGHT, CENTER);
+   text("Health: "+str(userShip[0].health)+"   ", width*(1-1/20), int(UIBarThickness*height/2));
+   textAlign(CENTER, CENTER);
+   fill(255, 0, 0);
+   text("GAME OVER", 500, 375);
+   text("SCORE:  ", 500, 375);
