@@ -50,8 +50,8 @@ IntList enemyShooting = new IntList(enemyShips.length); // Integer List Used for
 // Core Function Definitions
 void setup() {
   //Window Setup
-  //fullScreen(); // To be used with final product
-  size(1000, 750); // For use in testing
+  fullScreen(); // To be used with final product
+  //size(1000, 750); // For use in testing
   frameRate(30);
 
   //Controller Setup
@@ -197,6 +197,13 @@ void draw() {
   
     textAlign(RIGHT, CENTER); // Alignment
     text("Health: "+str(userShip[0].health)+"   ", width*(1-1/20), int(UIBarThickness*height/2)); // Display User Score
+  }
+  if (controllerMode){
+    if (stick.getButton("FIRE").pressed()){
+      if (userBullets[0].display == false) {
+       userShip[0].shoot(userBullets[0]);
+    }
+    }
   }
 }
 
